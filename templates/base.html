@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+
+		<title>{% block title %}{% endblock %}</title>
+
+		<script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+		<style>
+			div.box {
+				border: 1px solid black;
+				border-radius: 5px;
+				padding: 1em;
+				margin: 1em;
+				display: inline-block;
+			}
+			p, span, label, h3, h4 {
+				font-family: sans-serif;
+			}
+			p.wrap {
+				word-break: break-all;
+			    white-space: normal;
+			}
+			hr {
+				border: none;
+				height: 1px;
+				color: black;
+				background-color: black;
+			}
+			table {
+				margin: 0 auto;
+			}
+		</style>
+
+		{% block style %}{% endblock %}
+	</head>
+	<body>
+		<div style="display: flex; justify-content: center; align-items: center">
+			<div class="box" style="width: 450px">
+				{% block main %}{% endblock %}
+				<hr>
+				<p><i>Something wrong? <a href="#">Contact Me</a></i></p>
+			</div>
+		</div>
+		{% block script %}{% endblock %}
+	</body>
+</html>

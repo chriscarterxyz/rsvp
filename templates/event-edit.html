@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Your Event{% endblock %}
+
+{% block main %}
+
+<h3>Your Event Details</h3>
+
+<p>Fill in the dates you want to know when your guests are available between.</p>
+
+<form action="" method="POST" id="form">
+	<p>
+	<label for="name">Event Name<br></label>
+		<input type="text" id="name" name="name" value="{% if name %}{{ name }}{% endif %}" required>
+	</p>
+
+	<p>
+	<label for="startdate">Start Date<br></label>
+		<input type="date" id="startdate" name="startdate" value="{% if startdate %}{{ startdate }}{% endif %}" required>
+	</p>
+
+	<p>
+	<label for="enddate">End Date<br></label>
+		<input type="date" id="enddate" name="enddate" value="{% if enddate %}{{ enddate }}{% endif %}" required>
+	</p>
+
+</form>
+<p>
+	<button type="submit" form="form">Save</button>
+</p>
+
+{% endblock %}

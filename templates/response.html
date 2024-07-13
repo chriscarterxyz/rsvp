@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}RSVP to {{ name }}{% endblock %}
+
+{% block style %}
+<style>
+	td.selected {
+		background-color: lightblue;
+	}
+</style>
+{% endblock %}
+
+{% block main %}
+<h3>{{ name }} - When works for you?</h3>
+<h3>1. Respond</h3>
+<p>Click the calendar to select days that work for you, identify yourself, and then click submit.</p>
+
+{% for label, month in dates %}
+<div>
+	<p style="margin-bottom: 0.2em; text-align: center;">{{ label }}</p>
+	<table id="{{ loop.index - 1 }}">
+		{% for week in month %}
+		<tr>
+			{% for date_ in week %}
+			<td class="{{ date_[2] }}"><span  style="margin: 0.2em">{{ date_[1] }}</span></td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endfor %}
+
+<p>
+	<label for="guestname">Your Name:</label>
+	<input type="text" id="guestname" value="{% if guestname %}{{ guestname }}{% endif %}">
+</p>
+<p>
+	<button id="submit">Submit</button>
+</p>
+
+<hr>	
+
+<h3>2. Edit Your Response Later</h3>
+<p class="wrap" style="font-family: monospace">{{ request.url_root}}response/{{ responseuuid }}</p>
+<p>This is your own private RSVP link that you can use to come back and edit your response. <u>Don't lose it.</u></p>
+{% endblock %}
+
+{% block script %}
+<script>
+// handle cell clicking
+const cells = document.querySelectorAll('td');
+var selected = JSON.parse({{ initial_selected | tojson }});
+cells.forEach(cell => {
+	  cell.addEventListener('click', () => {
+		  var loc = cell.closest('table').id + "," + cell.closest('tr').rowIndex.toString() + ',' + cell.cellIndex.toString(); // row, col
+		  if (selected.includes(loc)) {
+			var index = selected.indexOf(loc);
+			selected.splice(index, 1);
+		  	cell.classList.remove('selected');
+		  } else {
+			selected.push(loc);
+		  	cell.classList.add('selected');
+		  }
+	  })
+});
+
+// submit 
+$("button").click(function(e) {
+	$.ajax({
+		type: 'POST',
+		url: '/response/{{ responseuuid }}',
+		dataType: "json",
+		contentType: 'application/json; charset=utf-8', 
+		data: JSON.stringify({
+			"selected": selected,
+			"startdate": "{{ startdate }}",
+			"enddate": "{{ enddate }}",
+			"guestname": document.getElementById('guestname').value
+		})
+	})
+
+})
+</script>
+{% endblock %}

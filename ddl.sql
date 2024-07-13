@@ -1,0 +1,24 @@
+CREATE TABLE IF NOT EXISTS event (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	uuid VARCHAR(22),
+	invitationuuid VARCHAR(22),
+	name VARCHAR(30),
+	startdate DATE,
+	enddate DATE
+);
+
+CREATE TABLE IF NOT EXISTS response (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	uuid VARCHAR(22),
+	eventid INTEGER,
+	guestname VARCHAR(30),
+	FOREIGN KEY(eventid) REFERENCES event(id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS responsedate (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	responseid INTEGER,
+	rdate DATE,
+	FOREIGN KEY(responseid) REFERENCES response(id) ON DELETE CASCADE
+);
+

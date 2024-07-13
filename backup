@@ -1,0 +1,12 @@
+#!/bin/bash
+
+[[ -z "$1" ]] && { echo "usage: ./backup <db> <destdir>"; exit 1; }
+db=$1
+[[ -z "$2" ]] && { echo "usage: ./backup <db> <destdir>"; exit 1; }
+destdir=$2
+
+
+destfile="$destdir/$(date '+%Y-%m-%d')-db.sqlite3.bk"
+
+sqlite3 $db '.backup '$destfile 
+

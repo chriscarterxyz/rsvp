@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block title %}{{ name }} - Dashboard{% endblock %}
+
+{% block style %}
+<style>
+.selected {
+	background-color: lightblue;
+}
+</style>
+{% endblock %}
+
+{% block main %}
+<h3>{{ name }} - Responses</h3>
+
+{% for label, month in dates %}
+<div>
+	<p style="margin-bottom: 0.2em; text-align: center;">{{ label }}</p>
+	<table id="{{ loop.index - 1 }}">
+		{% for week in month %}
+		<tr>
+			{% for date_ in week %}
+			<td class="" id="{{ date_[0] }}">
+				<span  style="margin: 0.2em">{{ date_[1] }}</span>
+			</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endfor %}
+
+<hr>
+
+<h3>1. Save Your Event</h3>
+<p class="wrap" style="font-family: monospace">{{ request.url }}</p>
+<p>This is your private link to administer this event. <u>Don't lose it.</u></p>
+
+<hr>
+
+<h3>2. Get Responses</h3>
+<p class="wrap" style="font-family: monospace">{{ request.url_root }}invitation/{{ invitationuuid }}</p>
+<p>Share this link with your guests. It will generate a unique response URL for each of them.</p>
+<p>Don't forget to record your own response, if necessary. Just paste the link in your own web browser.</p>
+
+<hr>
+
+<h3>3. More Actions</h3>
+<p><a href="/event/{{ eventuuid }}/edit">Edit This Event</a></p>
+<p><a href="/">Make A New Event</a></p>
+<form method="POST" action="/event/{{ eventuuid }}/delete"><button type="submit">Delete This Event</button></form>
+
+{% endblock %}
+
+{% block script %}
+<script>
+var counts = JSON.parse({{ counts | tojson }});
+
+var max = 0;
+for (var rdate in counts) {
+	if (counts[rdate] > max) {
+		max = counts[rdate];
+	}
+}
+
+for (var rdate in counts) {
+	var count = counts[rdate];
+	var cell = document.getElementById(rdate)
+	cell.style.backgroundColor = 'rgba(173, 216, 230,' + count / max + ')';
+
+}
+</script>
+{% endblock %}
